@@ -127,7 +127,7 @@
     <value>Apri repository / Documentazione</value>
   </data>
   <data name="BurstButton" xml:space="preserve">
-    <value>🎆 Raffica x5</value>
+    <value>🎆 Raffica</value>
   </data>
   <data name="GpuInfoButton" xml:space="preserve">
     <value>ℹ️ Info GPU</value>
@@ -138,7 +138,7 @@
   <data name="SoftwareRendering" xml:space="preserve">
     <value>⚠️ Rendering Software</value>
   </data>
-  <data name="InfoGPUMessage" xml:space="preserve">
+  <data name="GpuInfoTitleMessage" xml:space="preserve">
     <value>Informazioni GPU DirectX</value>
   </data>
   <data name="MessageOpenBrowserError" xml:space="preserve">

@@ -33,10 +33,10 @@ namespace AboutFormWithUIPanel
             panelTop = new Panel();
             btnBurst = new Button();
             btnGpuInfo = new Button();
-            lnkRepo = new LinkLabel();
-            lblVersion = new Label();
-            cmbLanguage = new ComboBox();
             lblTitle = new Label();
+            cmbLanguage = new ComboBox();
+            lblVersion = new Label();
+            lnkRepo = new LinkLabel();
             panelTop.SuspendLayout();
             SuspendLayout();
             // 
@@ -44,26 +44,26 @@ namespace AboutFormWithUIPanel
             // 
             fireworksPanel.BackColor = Color.Black;
             fireworksPanel.Dock = DockStyle.Fill;
-            fireworksPanel.Location = new Point(0, 79);
+            fireworksPanel.Location = new Point(0, 80);
             fireworksPanel.Name = "fireworksPanel";
-            fireworksPanel.Size = new Size(861, 561);
+            fireworksPanel.Size = new Size(861, 560);
             fireworksPanel.TabIndex = 0;
             // 
             // panelSettingsHost
             // 
             panelSettingsHost.BackColor = Color.FromArgb(18, 18, 18);
             panelSettingsHost.Dock = DockStyle.Right;
-            panelSettingsHost.Location = new Point(861, 79);
+            panelSettingsHost.Location = new Point(861, 80);
             panelSettingsHost.Name = "panelSettingsHost";
-            panelSettingsHost.Size = new Size(239, 561);
+            panelSettingsHost.Size = new Size(239, 560);
             panelSettingsHost.TabIndex = 2;
             // 
             // panelTop
             // 
             panelTop.BackColor = Color.FromArgb(10, 10, 10);
             panelTop.BorderStyle = BorderStyle.FixedSingle;
-            panelTop.Controls.Add(btnBurst);
             panelTop.Controls.Add(btnGpuInfo);
+            panelTop.Controls.Add(btnBurst);
             panelTop.Controls.Add(lnkRepo);
             panelTop.Controls.Add(lblVersion);
             panelTop.Controls.Add(cmbLanguage);
@@ -71,87 +71,83 @@ namespace AboutFormWithUIPanel
             panelTop.Dock = DockStyle.Top;
             panelTop.Location = new Point(0, 0);
             panelTop.Name = "panelTop";
-            panelTop.Padding = new Padding(16);
-            panelTop.Size = new Size(1100, 79);
+            panelTop.Padding = new Padding(12, 8, 12, 8);
+            panelTop.Size = new Size(1100, 80);
             panelTop.TabIndex = 1;
-            // 
-            // btnBurst
-            // 
-            btnBurst.BackColor = Color.FromArgb(50, 50, 50);
-            btnBurst.Dock = DockStyle.Right;
-            btnBurst.FlatStyle = FlatStyle.Flat;
-            btnBurst.ForeColor = Color.White;
-            btnBurst.Location = new Point(902, 16);
-            btnBurst.Name = "btnBurst";
-            btnBurst.Size = new Size(90, 45);
-            btnBurst.TabIndex = 4;
-            btnBurst.Text = "B5";
-            btnBurst.UseVisualStyleBackColor = false;
-            btnBurst.Click += BtnBurst_Click;
             // 
             // btnGpuInfo
             // 
+            btnGpuInfo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnGpuInfo.BackColor = Color.FromArgb(40, 40, 80);
-            btnGpuInfo.Dock = DockStyle.Right;
             btnGpuInfo.FlatStyle = FlatStyle.Flat;
             btnGpuInfo.ForeColor = Color.White;
-            btnGpuInfo.Location = new Point(992, 16);
+            btnGpuInfo.Location = new Point(996, 14);
             btnGpuInfo.Name = "btnGpuInfo";
-            btnGpuInfo.Size = new Size(90, 45);
+            btnGpuInfo.Size = new Size(90, 50);
             btnGpuInfo.TabIndex = 5;
-            btnGpuInfo.Text = "IG";
+            btnGpuInfo.Text = "GPU Info";
             btnGpuInfo.UseVisualStyleBackColor = false;
             btnGpuInfo.Click += BtnGpuInfo_Click;
             // 
-            // lnkRepo
+            // btnBurst
             // 
-            lnkRepo.AutoSize = true;
-            lnkRepo.Dock = DockStyle.Left;
-            lnkRepo.LinkColor = Color.Cyan;
-            lnkRepo.Location = new Point(205, 16);
-            lnkRepo.Name = "lnkRepo";
-            lnkRepo.Padding = new Padding(0, 8, 0, 0);
-            lnkRepo.Size = new Size(27, 23);
-            lnkRepo.TabIndex = 3;
-            lnkRepo.TabStop = true;
-            lnkRepo.Text = "Rep";
-            lnkRepo.LinkClicked += LnkRepo_LinkClicked;
-            // 
-            // lblVersion
-            // 
-            lblVersion.AutoSize = true;
-            lblVersion.Dock = DockStyle.Left;
-            lblVersion.Font = new Font("Segoe UI", 9F);
-            lblVersion.ForeColor = Color.LightGray;
-            lblVersion.Location = new Point(191, 16);
-            lblVersion.Name = "lblVersion";
-            lblVersion.Padding = new Padding(0, 8, 0, 0);
-            lblVersion.Size = new Size(14, 23);
-            lblVersion.TabIndex = 2;
-            lblVersion.Text = "V";
-            // 
-            // cmbLanguage
-            // 
-            cmbLanguage.Dock = DockStyle.Left;
-            cmbLanguage.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbLanguage.FormattingEnabled = true;
-            cmbLanguage.Location = new Point(71, 16);
-            cmbLanguage.Name = "cmbLanguage";
-            cmbLanguage.Size = new Size(120, 23);
-            cmbLanguage.TabIndex = 6;
-            cmbLanguage.SelectedIndexChanged += CmbLanguage_SelectedIndexChanged;
+            btnBurst.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnBurst.BackColor = Color.FromArgb(50, 50, 50);
+            btnBurst.FlatStyle = FlatStyle.Flat;
+            btnBurst.ForeColor = Color.White;
+            btnBurst.Location = new Point(900, 14);
+            btnBurst.Name = "btnBurst";
+            btnBurst.Size = new Size(90, 50);
+            btnBurst.TabIndex = 4;
+            btnBurst.Text = "Burst x5";
+            btnBurst.UseVisualStyleBackColor = false;
+            btnBurst.Click += BtnBurst_Click;
             // 
             // lblTitle
             // 
             lblTitle.AutoSize = true;
-            lblTitle.Dock = DockStyle.Left;
-            lblTitle.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitle.ForeColor = SystemColors.Control;
-            lblTitle.Location = new Point(16, 16);
+            lblTitle.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+            lblTitle.ForeColor = Color.White;
+            lblTitle.Location = new Point(12, 12);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(55, 45);
+            lblTitle.Size = new Size(300, 37);
             lblTitle.TabIndex = 1;
-            lblTitle.Text = "SF";
+            lblTitle.Text = "FireworksDX — Ghostly";
+            // 
+            // cmbLanguage
+            // 
+            cmbLanguage.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbLanguage.FormattingEnabled = true;
+            cmbLanguage.Location = new Point(15, 52);
+            cmbLanguage.Name = "cmbLanguage";
+            cmbLanguage.Size = new Size(150, 23);
+            cmbLanguage.TabIndex = 6;
+            cmbLanguage.SelectedIndexChanged += CmbLanguage_SelectedIndexChanged;
+            // 
+            // lblVersion
+            // 
+            lblVersion.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblVersion.Font = new Font("Segoe UI", 9.5F);
+            lblVersion.ForeColor = Color.LightGray;
+            lblVersion.Location = new Point(550, 18);
+            lblVersion.Name = "lblVersion";
+            lblVersion.Size = new Size(340, 20);
+            lblVersion.TabIndex = 2;
+            lblVersion.Text = "Version: 1.0.0.0";
+            lblVersion.TextAlign = ContentAlignment.TopRight;
+            // 
+            // lnkRepo
+            // 
+            lnkRepo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lnkRepo.LinkColor = Color.Cyan;
+            lnkRepo.Location = new Point(550, 44);
+            lnkRepo.Name = "lnkRepo";
+            lnkRepo.Size = new Size(340, 20);
+            lnkRepo.TabIndex = 3;
+            lnkRepo.TabStop = true;
+            lnkRepo.Text = "Open repository / Documentation";
+            lnkRepo.TextAlign = ContentAlignment.TopRight;
+            lnkRepo.LinkClicked += LnkRepo_LinkClicked;
             // 
             // AboutFormFireDX
             // 

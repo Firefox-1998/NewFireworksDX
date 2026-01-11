@@ -10,7 +10,7 @@ namespace FireworksDX.Engine
         private readonly Random rnd = new();
         private WaveOutEvent? outputDevice;
         private MixingSampleProvider? mixer;
-        private CachedSound? explosionSound;
+        private RandomSoundPool? explosionSoundPool;
 
         // Total duration of the audio file in seconds
         private const double AudioDurationSeconds = 1.0;
@@ -37,32 +37,44 @@ namespace FireworksDX.Engine
             {
                 string audioPath = GetExplosionSoundPath();
 
-                if (!string.IsNullOrEmpty(audioPath) && File.Exists(audioPath))
+                // Create sound pool
+                explosionSoundPool = new RandomSoundPool();
+
+                // Check if path is a directory or a file
+                if (Directory.Exists(audioPath))
                 {
-                    // Load sound into memory (once only)
-                    explosionSound = new CachedSound(audioPath);
-
-                    // Initialize output device
-                    outputDevice = new WaveOutEvent();
-
-                    // Create mixer to handle simultaneous audio
-                    mixer = new MixingSampleProvider(explosionSound.WaveFormat)
-                    {
-                        ReadFully = true
-                    };
-
-                    outputDevice.Init(mixer);
-                    outputDevice.Play();
+                    // Load all WAV files from directory
+                    explosionSoundPool.LoadFromDirectory(audioPath, "*.wav");
                 }
-                else
+                else if (File.Exists(audioPath))
                 {
-
+                    // Load single file
+                    explosionSoundPool.LoadSound(audioPath);
                 }
+
+                // If no sounds were loaded, clean up
+                if (!explosionSoundPool.HasSounds)
+                {
+                    explosionSoundPool = null;
+                    return;
+                }
+
+                // Initialize output device
+                outputDevice = new WaveOutEvent();
+
+                // Create mixer to handle simultaneous audio
+                mixer = new MixingSampleProvider(explosionSoundPool.WaveFormat)
+                {
+                    ReadFully = true
+                };
+
+                outputDevice.Init(mixer);
+                outputDevice.Play();
             }
             catch (Exception)
             {
                 // If loading fails, clean up everything
-                explosionSound = null;
+                explosionSoundPool = null;
                 outputDevice?.Dispose();
                 outputDevice = null;
                 mixer = null;
@@ -70,9 +82,9 @@ namespace FireworksDX.Engine
         }
 
         /// <summary>
-        /// Gets the path of the explosion audio file.
+        /// Gets the path of the explosion audio file or directory.
         /// If FireworksConfig.ExplosionSoundPath is set, uses that.
-        /// Otherwise uses the default path: [DllDirectory]\Audio\explosion.wav
+        /// Otherwise uses the default path: [DllDirectory]\Audio\
         /// </summary>
         private string GetExplosionSoundPath()
         {
@@ -82,11 +94,11 @@ namespace FireworksDX.Engine
                 return FireworksConfig.ExplosionSoundPath;
             }
 
-            // Otherwise use the default path relative to the DLL
+            // Otherwise use the default directory relative to the DLL
             string assemblyLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string assemblyDirectory = Path.GetDirectoryName(assemblyLocation) ?? AppDomain.CurrentDomain.BaseDirectory;
 
-            return Path.Combine(assemblyDirectory, "Audio", "explosion.wav");
+            return Path.Combine(assemblyDirectory, "Audio");
         }
 
         /// <summary>
@@ -99,7 +111,8 @@ namespace FireworksDX.Engine
             outputDevice?.Dispose();
             outputDevice = null;
             mixer = null;
-            explosionSound = null;
+            explosionSoundPool?.Clear();
+            explosionSoundPool = null;
 
             // Reinitialize
             InitializeSoundPool();
@@ -164,16 +177,21 @@ namespace FireworksDX.Engine
         }
 
         /// <summary>
-        /// Plays the rocket audio with speed adapted to flight time.
+        /// Plays a random rocket audio with speed adapted to flight time.
         /// </summary>
         /// <param name="flightTimeSeconds">Estimated flight time in seconds.</param>
         private void PlayRocketSound(double flightTimeSeconds)
         {
-            if (!EnableSound || !FireworksConfig.EnableAudio || explosionSound == null || mixer == null)
+            if (!EnableSound || !FireworksConfig.EnableAudio || explosionSoundPool == null || mixer == null)
                 return;
 
             try
             {
+                // Get a random sound from the pool
+                var randomSound = explosionSoundPool.GetRandomSound();
+                if (randomSound == null)
+                    return;
+
                 // Calculate playback speed to synchronize audio with flight
                 // If flight lasts 0.8 seconds and audio 1.0 seconds, speed = 1.0/0.8 = 1.25x
                 float playbackSpeed = (float)(AudioDurationSeconds / flightTimeSeconds);
@@ -182,7 +200,7 @@ namespace FireworksDX.Engine
                 playbackSpeed = Math.Clamp(playbackSpeed, 0.5f, 2.0f);
 
                 // Add audio to mixer with calculated speed
-                mixer.AddMixerInput(new CachedSoundSampleProvider(explosionSound, playbackSpeed));
+                mixer.AddMixerInput(new CachedSoundSampleProvider(randomSound, playbackSpeed));
             }
             catch (Exception)
             {
@@ -203,13 +221,18 @@ namespace FireworksDX.Engine
         /// </summary>
         private void PlayExplosionSoundOnly()
         {
-            if (!EnableSound || !FireworksConfig.EnableAudio || explosionSound == null || mixer == null)
+            if (!EnableSound || !FireworksConfig.EnableAudio || explosionSoundPool == null || mixer == null)
                 return;
 
             try
             {
+                // Get a random sound from the pool
+                var randomSound = explosionSoundPool.GetRandomSound();
+                if (randomSound == null)
+                    return;
+
                 // Play audio at double speed to get a faster explosion
-                mixer.AddMixerInput(new CachedSoundSampleProvider(explosionSound, 2.0f));
+                mixer.AddMixerInput(new CachedSoundSampleProvider(randomSound, 2.0f));
             }
             catch (Exception)
             {

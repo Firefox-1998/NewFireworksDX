@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
+using System.Runtime.InteropServices.Marshalling;
 
 
 namespace AboutFormWithUIPanel
@@ -131,7 +132,8 @@ namespace AboutFormWithUIPanel
 
         private void BtnBurst_Click(object? sender, EventArgs e)
         {
-            fireworksPanel.LaunchBurst(5);
+            Random iBurstNumRocket = new();            
+            fireworksPanel.LaunchBurst(iBurstNumRocket.Next(3, 8));
         }
 
         private void BtnGpuInfo_Click(object? sender, EventArgs e)
@@ -143,7 +145,7 @@ namespace AboutFormWithUIPanel
 
                 MessageBox.Show(
                     $"{info}\n\n{gpuStatus}",
-                    GetResource("GpuInfoTitle"),
+                    GetResource("GpuInfoTitleMessage"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information
                 );
