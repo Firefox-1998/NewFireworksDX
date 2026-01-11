@@ -1,4 +1,4 @@
-namespace PannelloUI
+namespace AboutFormWithUIPanel
 {
     internal static class Program
     {

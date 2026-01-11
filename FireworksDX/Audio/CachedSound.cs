@@ -3,7 +3,7 @@ using NAudio.Wave;
 namespace FireworksDX.Audio
 {
     /// <summary>
-    /// Rappresenta un file audio caricato in memoria per riproduzione rapida e simultanea.
+    /// Represents an audio file loaded into memory for fast and simultaneous playback.
     /// </summary>
     internal class CachedSound
     {
@@ -14,16 +14,16 @@ namespace FireworksDX.Audio
         {
             using var audioFileReader = new AudioFileReader(audioFileName);
             WaveFormat = audioFileReader.WaveFormat;
-            
+
             var wholeFile = new List<float>((int)(audioFileReader.Length / 4));
             var readBuffer = new float[audioFileReader.WaveFormat.SampleRate * audioFileReader.WaveFormat.Channels];
             int samplesRead;
-            
+
             while ((samplesRead = audioFileReader.Read(readBuffer, 0, readBuffer.Length)) > 0)
             {
                 wholeFile.AddRange(readBuffer.Take(samplesRead));
             }
-            
+
             AudioData = [.. wholeFile];
         }
     }

@@ -10,7 +10,7 @@ namespace FireworksDX.WinForms
         private FireworksEngine engine = new();
         private System.Windows.Forms.Timer timer = new();
 
-        public string GetGpuInfo() => host?.GetAdapterInfo() ?? "DirectX non inizializzato";
+        public string GetGpuInfo() => host?.GetAdapterInfo() ?? "DirectX not initialized";
         public bool IsUsingGpu => host?.IsUsingHardwareAcceleration ?? false;
 
         public FireworksPanel()
@@ -32,9 +32,9 @@ namespace FireworksDX.WinForms
         }
 
         /// <summary>
-        /// Lancia una raffica di esplosioni immediate.
+        /// Launches a burst of rockets.
         /// </summary>
-        /// <param name="count">Numero di esplosioni da lanciare.</param>
+        /// <param name="count">Number of rockets to launch.</param>
         public void LaunchBurst(int count)
         {
             if (count <= 0 || Width <= 0 || Height <= 0) return;

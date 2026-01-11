@@ -11,11 +11,11 @@ namespace FireworksDX.Engine
         private WaveOutEvent? outputDevice;
         private MixingSampleProvider? mixer;
         private CachedSound? explosionSound;
-        
-        // Durata totale del file audio in secondi
+
+        // Total duration of the audio file in seconds
         private const double AudioDurationSeconds = 1.0;
-        
-        // FPS stimato (60 fps)
+
+        // Estimated FPS (60 fps)
         private const double FrameRate = 60.0;
 
         public List<Rocket> Rockets { get; } = [];
@@ -39,18 +39,18 @@ namespace FireworksDX.Engine
 
                 if (!string.IsNullOrEmpty(audioPath) && File.Exists(audioPath))
                 {
-                    // Carica il suono in memoria (una sola volta)
+                    // Load sound into memory (once only)
                     explosionSound = new CachedSound(audioPath);
-                    
-                    // Inizializza il dispositivo di output
+
+                    // Initialize output device
                     outputDevice = new WaveOutEvent();
-                    
-                    // Crea il mixer per gestire audio simultanei
+
+                    // Create mixer to handle simultaneous audio
                     mixer = new MixingSampleProvider(explosionSound.WaveFormat)
                     {
                         ReadFully = true
                     };
-                    
+
                     outputDevice.Init(mixer);
                     outputDevice.Play();
                 }
@@ -61,7 +61,7 @@ namespace FireworksDX.Engine
             }
             catch (Exception)
             {
-                // Se il caricamento fallisce, pulisci tutto
+                // If loading fails, clean up everything
                 explosionSound = null;
                 outputDevice?.Dispose();
                 outputDevice = null;
@@ -70,38 +70,38 @@ namespace FireworksDX.Engine
         }
 
         /// <summary>
-        /// Ottiene il percorso del file audio di esplosione.
-        /// Se FireworksConfig.ExplosionSoundPath è impostato, usa quello.
-        /// Altrimenti usa il path di default: [DllDirectory]\Audio\explosion.wav
+        /// Gets the path of the explosion audio file.
+        /// If FireworksConfig.ExplosionSoundPath is set, uses that.
+        /// Otherwise uses the default path: [DllDirectory]\Audio\explosion.wav
         /// </summary>
         private string GetExplosionSoundPath()
         {
-            // Se è impostato un path personalizzato, usalo
+            // If a custom path is set, use it
             if (!string.IsNullOrWhiteSpace(FireworksConfig.ExplosionSoundPath))
             {
                 return FireworksConfig.ExplosionSoundPath;
             }
 
-            // Altrimenti usa il path di default relativo alla DLL
+            // Otherwise use the default path relative to the DLL
             string assemblyLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string assemblyDirectory = Path.GetDirectoryName(assemblyLocation) ?? AppDomain.CurrentDomain.BaseDirectory;
-            
+
             return Path.Combine(assemblyDirectory, "Audio", "explosion.wav");
         }
 
         /// <summary>
-        /// Ricarica il file audio (utile se cambia il path durante l'esecuzione).
+        /// Reloads the audio file (useful if the path changes during execution).
         /// </summary>
         public void ReloadSound()
         {
-            // Ferma e disponi delle risorse esistenti
+            // Stop and dispose of existing resources
             outputDevice?.Stop();
             outputDevice?.Dispose();
             outputDevice = null;
             mixer = null;
             explosionSound = null;
 
-            // Reinizializza
+            // Reinitialize
             InitializeSoundPool();
         }
 
@@ -137,12 +137,12 @@ namespace FireworksDX.Engine
             double velocityY = -(FireworksConfig.RocketMinSpeed +
                        rnd.NextDouble() * (FireworksConfig.RocketMaxSpeed - FireworksConfig.RocketMinSpeed));
 
-            // Calcola il tempo di volo in frame usando cinematica
-            // Quando il razzo raggiunge il picco, velocityY diventa 0
-            // Formula: t = -v₀ / g (numero di frame necessari)
+            // Calculate flight time in frames using kinematics
+            // When the rocket reaches its peak, velocityY becomes 0
+            // Formula: t = -v₀ / g (number of frames needed)
             double flightTimeFrames = Math.Abs(velocityY / FireworksConfig.RocketGravity);
-            
-            // Converti da frame a secondi
+
+            // Convert from frames to seconds
             double flightTimeSeconds = flightTimeFrames / FrameRate;
 
             var rocket = new Rocket
@@ -159,14 +159,14 @@ namespace FireworksDX.Engine
 
             Rockets.Add(rocket);
 
-            // Riproduci l'audio AL LANCIO con velocità adattata al tempo di volo
+            // Play audio AT LAUNCH with speed adapted to flight time
             PlayRocketSound(rocket.EstimatedFlightTime);
         }
 
         /// <summary>
-        /// Riproduce l'audio del razzo con velocità adattata al tempo di volo.
+        /// Plays the rocket audio with speed adapted to flight time.
         /// </summary>
-        /// <param name="flightTimeSeconds">Tempo di volo stimato in secondi.</param>
+        /// <param name="flightTimeSeconds">Estimated flight time in seconds.</param>
         private void PlayRocketSound(double flightTimeSeconds)
         {
             if (!EnableSound || !FireworksConfig.EnableAudio || explosionSound == null || mixer == null)
@@ -174,24 +174,24 @@ namespace FireworksDX.Engine
 
             try
             {
-                // Calcola la velocità di riproduzione per sincronizzare audio e volo
-                // Se il volo dura 0.8 secondi e l'audio 1.0 secondi, velocità = 1.0/0.8 = 1.25x
+                // Calculate playback speed to synchronize audio with flight
+                // If flight lasts 0.8 seconds and audio 1.0 seconds, speed = 1.0/0.8 = 1.25x
                 float playbackSpeed = (float)(AudioDurationSeconds / flightTimeSeconds);
-                
-                // Limita la velocità tra 0.5x e 2.0x per evitare suoni troppo distorti
+
+                // Limit speed between 0.5x and 2.0x to avoid overly distorted sounds
                 playbackSpeed = Math.Clamp(playbackSpeed, 0.5f, 2.0f);
 
-                // Aggiungi l'audio al mixer con la velocità calcolata
+                // Add audio to mixer with calculated speed
                 mixer.AddMixerInput(new CachedSoundSampleProvider(explosionSound, playbackSpeed));
             }
             catch (Exception)
             {
-                // Ignora l'errore
+                // Ignore error
             }
         }
 
         /// <summary>
-        /// Lancia n razzi contemporaneamente (per effetti burst con audio sincronizzato).
+        /// Launches n rockets simultaneously (for burst effects with synchronized audio).
         /// </summary>
         public void LaunchImmediateBurstRocket(int width, int height)
         {
@@ -199,7 +199,7 @@ namespace FireworksDX.Engine
         }
 
         /// <summary>
-        /// Riproduce solo la parte dell'esplosione (circa metà dell'audio accelerato).
+        /// Plays only the explosion part (about half of the accelerated audio).
         /// </summary>
         private void PlayExplosionSoundOnly()
         {
@@ -208,12 +208,12 @@ namespace FireworksDX.Engine
 
             try
             {
-                // Riproduci l'audio a velocità doppia per ottenere un'esplosione più rapida
+                // Play audio at double speed to get a faster explosion
                 mixer.AddMixerInput(new CachedSoundSampleProvider(explosionSound, 2.0f));
             }
             catch (Exception)
             {
-                // Ignora l'errore
+                // Ignore error
             }
         }
 
@@ -233,12 +233,12 @@ namespace FireworksDX.Engine
             {
                 var r = Rockets[i];
 
-                // Crea nuove istanze di Vec2 con i valori aggiornati
+                // Create new Vec2 instances with updated values
                 r.Position = new Vec2(
                     r.Position.X + r.Velocity.X,
                     r.Position.Y + r.Velocity.Y
                 );
-                
+
                 r.Velocity = new Vec2(
                     r.Velocity.X,
                     r.Velocity.Y + FireworksConfig.RocketGravity
@@ -254,8 +254,8 @@ namespace FireworksDX.Engine
 
         private void Explode(Rocket r)
         {
-            // NON riprodurre audio qui perché è già stato riprodotto al lancio
-            // L'audio si sincronizza automaticamente con l'esplosione visiva
+            // DO NOT play audio here because it was already played at launch
+            // The audio synchronizes automatically with the visual explosion
 
             int bursts = rnd.Next(FireworksConfig.MinBursts, FireworksConfig.MaxBursts);
 
@@ -308,18 +308,18 @@ namespace FireworksDX.Engine
             {
                 var p = Particles[i];
 
-                // Aggiorna posizione
+                // Update position
                 p.Position = new Vec2(
                     p.Position.X + p.Velocity.X,
                     p.Position.Y + p.Velocity.Y
                 );
-                
-                // Aggiorna velocità (gravità)
+
+                // Update velocity (gravity)
                 p.Velocity = new Vec2(
                     p.Velocity.X,
                     p.Velocity.Y + FireworksConfig.ParticleGravity
                 );
-                
+
                 p.Life--;
 
                 p.Trail.Enqueue(p.Position);
@@ -337,12 +337,12 @@ namespace FireworksDX.Engine
             {
                 var s = Smoke[i];
 
-                // Aggiorna posizione
+                // Update position
                 s.Position = new Vec2(
                     s.Position.X + s.Velocity.X,
                     s.Position.Y + s.Velocity.Y
                 );
-                
+
                 s.Life--;
 
                 if (s.Life <= 0)
@@ -351,7 +351,7 @@ namespace FireworksDX.Engine
         }
 
         /// <summary>
-        /// Rilascia le risorse audio quando l'engine viene distrutto.
+        /// Releases audio resources when the engine is destroyed.
         /// </summary>
         ~FireworksEngine()
         {

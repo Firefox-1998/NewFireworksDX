@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 using System.Reflection;
 using System.Resources;
 
 
-namespace PannelloUI
+namespace AboutFormWithUIPanel
 {
     public partial class AboutFormFireDX : Form
     {
@@ -14,12 +15,66 @@ namespace PannelloUI
         {
             _resources = new ResourceManager(typeof(AboutFormFireDX));
             InitializeComponent();
+            InitializeLanguageComboBox();
             LoadLocalizedStrings();
             InitializeRuntimeHosts();
         }
 
+        private void InitializeLanguageComboBox()
+        {
+            // Define available languages
+            var languages = new Dictionary<string, CultureInfo>
+            {
+                ["English (US)"] = new CultureInfo("en-US"),
+                ["Italiano"] = new CultureInfo("it-IT")
+            };
+
+            cmbLanguage.DataSource = new BindingSource(languages, string.Empty);
+            cmbLanguage.DisplayMember = "Key";
+            cmbLanguage.ValueMember = "Value";
+
+            // Set English US as default
+            cmbLanguage.SelectedValue = new CultureInfo("en-US");
+
+            // Set default culture
+            var defaultCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = defaultCulture;
+            Thread.CurrentThread.CurrentCulture = defaultCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
+            CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
+        }
+
+        private void CmbLanguage_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (cmbLanguage.SelectedValue is CultureInfo selectedCulture)
+            {
+                ChangeCulture(selectedCulture);
+            }
+        }
+
+        private void ChangeCulture(CultureInfo culture)
+        {
+            // Set culture for the current thread
+            Thread.CurrentThread.CurrentUICulture = culture;
+            Thread.CurrentThread.CurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+
+            // Reload localized strings
+            LoadLocalizedStrings();
+
+            // Reload settings panel to update its strings as well
+            if (_settingsForm != null)
+            {
+                panelSettingsHost.Controls.Remove(_settingsForm);
+                _settingsForm.Dispose();
+                _settingsForm = null;
+            }
+            InitializeRuntimeHosts();
+        }
+
         /// <summary>
-        /// Ottiene una stringa dal ResourceManager, lancia eccezione se non trovata.
+        /// Gets a string from the ResourceManager, throws exception if not found.
         /// </summary>
         private string GetResource(string key)
         {
@@ -32,7 +87,7 @@ namespace PannelloUI
             var version = Assembly.GetEntryAssembly()?.GetName().Version?.ToString()
                         ?? Assembly.GetExecutingAssembly().GetName().Version?.ToString()
                         ?? "0.0.0";
-            // Carica le stringhe dal RESX
+            // Load strings from RESX
             lblVersion.Text = string.Format(GetResource("VersionLabel"), version);
             lblTitle.Text = GetResource("Title");
             lnkRepo.Text = GetResource("OpenRepository");
@@ -42,7 +97,7 @@ namespace PannelloUI
 
         private void InitializeRuntimeHosts()
         {
-            // Host FireworksSettingsPanel nel pannello laterale
+            // Host FireworksSettingsPanel in the side panel
             _settingsForm = new FireworksSettingsPanel
             {
                 TopLevel = false,
@@ -59,15 +114,15 @@ namespace PannelloUI
             {
                 Process.Start(new ProcessStartInfo
                 {
-                    FileName = "https://example.com/fireworksdx",
+                    FileName = "https://github.com/Firefox-1998/NewFireworksDX",
                     UseShellExecute = true
                 });
             }
             catch (System.ComponentModel.Win32Exception ex)
             {
                 MessageBox.Show(
-                    $"Impossibile aprire il browser: {ex.Message}",
-                    "Errore",
+                    string.Format(GetResource("MessageOpenBrowserError"), ex.Message),
+                    "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning
                 );
@@ -85,11 +140,11 @@ namespace PannelloUI
             {
                 string info = fireworksPanel.GetGpuInfo();
                 string gpuStatus = fireworksPanel.IsUsingGpu ? GetResource("GpuAccelerationActive") : GetResource("SoftwareRendering");
-                
+
                 MessageBox.Show(
-                    $"{info}\n\n{gpuStatus}", 
-                    GetResource("GpuInfoTitle"), 
-                    MessageBoxButtons.OK, 
+                    $"{info}\n\n{gpuStatus}",
+                    GetResource("GpuInfoTitle"),
+                    MessageBoxButtons.OK,
                     MessageBoxIcon.Information
                 );
             }

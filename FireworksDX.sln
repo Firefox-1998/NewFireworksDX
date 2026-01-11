@@ -5,7 +5,13 @@ VisualStudioVersion = 17.14.36811.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FireworksDX", "FireworksDX\FireworksDX.csproj", "{5D95EC0C-0F84-92DB-8362-FB75A85FBEE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIPanel_Example", "PannelloUI\UIPanel_Example.csproj", "{56CDF356-E496-408E-8DF1-D8B86778D39A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AboutFormWithUIPanel_Example", "PannelloUI\AboutFormWithUIPanel_Example.csproj", "{56CDF356-E496-408E-8DF1-D8B86778D39A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementi di soluzione", "Elementi di soluzione", "{9DF70304-0A22-CE1E-AA12-D5904EE55694}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

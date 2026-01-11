@@ -141,4 +141,7 @@
   <data name="InfoGPUMessage" xml:space="preserve">
     <value>Informazioni GPU DirectX</value>
   </data>
+  <data name="MessageOpenBrowserError" xml:space="preserve">
+    <value>Impossibile aprire il browser: {0}</value>
+  </data>
 </root>

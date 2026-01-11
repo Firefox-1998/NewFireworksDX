@@ -1,4 +1,4 @@
-﻿namespace PannelloUI
+﻿namespace AboutFormWithUIPanel
 {
     partial class FireworksSettingsPanel
     {
@@ -68,7 +68,7 @@
             chkGlow.Name = "chkGlow";
             chkGlow.Size = new Size(53, 19);
             chkGlow.TabIndex = 1;
-            chkGlow.Text = "Glow";
+            chkGlow.Text = "G";
             // 
             // chkTwinkle
             // 
@@ -77,7 +77,7 @@
             chkTwinkle.Name = "chkTwinkle";
             chkTwinkle.Size = new Size(66, 19);
             chkTwinkle.TabIndex = 2;
-            chkTwinkle.Text = "Twinkle";
+            chkTwinkle.Text = "T";
             // 
             // chkSmoke
             // 
@@ -86,7 +86,7 @@
             chkSmoke.Name = "chkSmoke";
             chkSmoke.Size = new Size(62, 19);
             chkSmoke.TabIndex = 3;
-            chkSmoke.Text = "Smoke";
+            chkSmoke.Text = "S";
             // 
             // trackIntensity
             // 
@@ -107,7 +107,7 @@
             lblProfile.Name = "lblProfile";
             lblProfile.Size = new Size(41, 15);
             lblProfile.TabIndex = 5;
-            lblProfile.Text = "Profile";
+            lblProfile.Text = "P";
             // 
             // lblIntensity
             // 
@@ -116,7 +116,7 @@
             lblIntensity.Name = "lblIntensity";
             lblIntensity.Size = new Size(52, 15);
             lblIntensity.TabIndex = 6;
-            lblIntensity.Text = "Intensity";
+            lblIntensity.Text = "I";
             // 
             // btnApply
             // 
@@ -124,7 +124,7 @@
             btnApply.Name = "btnApply";
             btnApply.Size = new Size(90, 30);
             btnApply.TabIndex = 7;
-            btnApply.Text = "Apply";
+            btnApply.Text = "A";
             // 
             // btnRandom
             // 
@@ -132,7 +132,7 @@
             btnRandom.Name = "btnRandom";
             btnRandom.Size = new Size(90, 30);
             btnRandom.TabIndex = 8;
-            btnRandom.Text = "Random";
+            btnRandom.Text = "R";
             // 
             // chkAudio
             // 

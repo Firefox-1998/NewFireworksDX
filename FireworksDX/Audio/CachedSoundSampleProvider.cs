@@ -3,8 +3,8 @@ using NAudio.Wave;
 namespace FireworksDX.Audio
 {
     /// <summary>
-    /// Provider per riprodurre un CachedSound attraverso NAudio con supporto per velocità variabile.
-    /// Ogni istanza rappresenta una singola riproduzione del suono.
+    /// Provider to play a CachedSound through NAudio with variable speed support.
+    /// Each instance represents a single playback of the sound.
     /// </summary>
     internal class CachedSoundSampleProvider : ISampleProvider
     {
@@ -13,14 +13,14 @@ namespace FireworksDX.Audio
         private float position;
 
         /// <summary>
-        /// Crea un provider per riprodurre il suono.
+        /// Creates a provider to play the sound.
         /// </summary>
-        /// <param name="cachedSound">Il suono da riprodurre.</param>
-        /// <param name="playbackSpeed">Velocità di riproduzione (1.0 = normale, 0.5 = metà velocità, 2.0 = doppia velocità). Default: 1.0</param>
+        /// <param name="cachedSound">The sound to play.</param>
+        /// <param name="playbackSpeed">Playback speed (1.0 = normal, 0.5 = half speed, 2.0 = double speed). Default: 1.0</param>
         public CachedSoundSampleProvider(CachedSound cachedSound, float playbackSpeed = 1.0f)
         {
             this.cachedSound = cachedSound;
-            this.playbackSpeed = Math.Max(0.1f, playbackSpeed); // Previeni velocità zero o negative
+            this.playbackSpeed = Math.Max(0.1f, playbackSpeed); // Prevent zero or negative speeds
             position = 0;
         }
 
@@ -31,10 +31,10 @@ namespace FireworksDX.Audio
             for (int i = 0; i < count; i++)
             {
                 int sampleIndex = (int)position;
-                
+
                 if (sampleIndex >= cachedSound.AudioData.Length)
                 {
-                    break; // Fine del suono
+                    break; // End of sound
                 }
 
                 buffer[offset + i] = cachedSound.AudioData[sampleIndex];

@@ -1,14 +1,19 @@
 ﻿using FireworksDX.Config;
+using System.Reflection;
+using System.Resources;
 
-namespace PannelloUI
+namespace AboutFormWithUIPanel
 {
     public partial class FireworksSettingsPanel : Form
     {
         private Dictionary<string, Action>? _profiles;
+        private readonly ResourceManager _resources;
 
         public FireworksSettingsPanel()
         {
+            _resources = new ResourceManager(typeof(FireworksSettingsPanel));
             InitializeComponent();
+            LoadLocalizedStrings();
             InitializeProfiles();
             LoadProfiles();
             LoadCurrentConfig();
@@ -16,27 +21,52 @@ namespace PannelloUI
             RandomProfile();
         }
 
+        /// <summary>
+        /// Ottiene una stringa dal ResourceManager, lancia eccezione se non trovata.
+        /// </summary>
+        private string GetResource(string key)
+        {
+            return _resources.GetString(key)
+                ?? throw new InvalidOperationException($"Missing resource: {key}");
+        }
+
+        private void LoadLocalizedStrings()
+        {
+            var version = Assembly.GetEntryAssembly()?.GetName().Version?.ToString()
+                        ?? Assembly.GetExecutingAssembly().GetName().Version?.ToString()
+                        ?? "0.0.0";
+            // Carica le stringhe dal RESX
+            btnApply.Text = GetResource("btnApply");
+            btnRandom.Text = GetResource("btnRandom");
+            chkAudio.Text = GetResource("chkAudio");
+            chkGlow.Text = GetResource("chkGlow");
+            chkSmoke.Text = GetResource("chkSmoke");
+            chkTwinkle.Text = GetResource("chkTwinkle");
+            lblIntensity.Text = GetResource("lblIntensity");
+            lblProfile.Text = GetResource("lblProfile");
+        }
+
         private void InitializeProfiles()
         {
             _profiles = new Dictionary<string, Action>
             {
-                ["Default"] = FireworksConfig.LoadDefault,
-                ["New Year Show"] = FireworksConfig.LoadNewYearShow,
-                ["Japan Hanabi"] = FireworksConfig.LoadJapanHanabi,
-                ["Mega Show"] = FireworksConfig.LoadMegaShow,
-                ["Golden Rain"] = FireworksConfig.LoadGoldenRain,
-                ["Cyber Neon"] = FireworksConfig.LoadCyberNeon,
-                ["Calm Festival"] = FireworksConfig.LoadCalmFestival,
-                ["Red Dragon"] = FireworksConfig.LoadRedDragon,
-                ["Winter Festival"] = FireworksConfig.LoadWinterFestival,
-                ["Halloween Spirits"] = FireworksConfig.LoadHalloweenSpirits,
-                ["Summer Beach Party"] = FireworksConfig.LoadSummerBeachParty,
-                ["Christmas Magic"] = FireworksConfig.LoadChristmasMagic,
-                ["Chrysanthemum"] = FireworksConfig.LoadChrysanthemum,
-                ["Peony"] = FireworksConfig.LoadPeony,
-                ["Willow"] = FireworksConfig.LoadWillow,
-                ["Palm Tree"] = FireworksConfig.LoadPalmTree,
-                ["Strobe Shell"] = FireworksConfig.LoadStrobeShell
+                [GetResource("FireworksProfileName_1")] = FireworksConfig.LoadDefault,
+                [GetResource("FireworksProfileName_2")] = FireworksConfig.LoadNewYearShow,
+                [GetResource("FireworksProfileName_3")] = FireworksConfig.LoadJapanHanabi,
+                [GetResource("FireworksProfileName_4")] = FireworksConfig.LoadMegaShow,
+                [GetResource("FireworksProfileName_5")] = FireworksConfig.LoadGoldenRain,
+                [GetResource("FireworksProfileName_6")] = FireworksConfig.LoadCyberNeon,
+                [GetResource("FireworksProfileName_7")] = FireworksConfig.LoadCalmFestival,
+                [GetResource("FireworksProfileName_8")] = FireworksConfig.LoadRedDragon,
+                [GetResource("FireworksProfileName_9")] = FireworksConfig.LoadWinterFestival,
+                [GetResource("FireworksProfileName_10")] = FireworksConfig.LoadHalloweenSpirits,
+                [GetResource("FireworksProfileName_11")] = FireworksConfig.LoadSummerBeachParty,
+                [GetResource("FireworksProfileName_12")] = FireworksConfig.LoadChristmasMagic,
+                [GetResource("FireworksProfileName_13")] = FireworksConfig.LoadChrysanthemum,
+                [GetResource("FireworksProfileName_14")] = FireworksConfig.LoadPeony,
+                [GetResource("FireworksProfileName_15")] = FireworksConfig.LoadWillow,
+                [GetResource("FireworksProfileName_16")] = FireworksConfig.LoadPalmTree,
+                [GetResource("FireworksProfileName_17")] = FireworksConfig.LoadStrobeShell
             };
         }
 
@@ -68,7 +98,7 @@ namespace PannelloUI
         private void ApplyProfile()
         {
             btnApply.Enabled = false;
-            btnApply.Text = "Applicazione...";
+            btnApply.Text = GetResource("btnApply_To");
 
             try
             {
@@ -89,7 +119,7 @@ namespace PannelloUI
             }
             finally
             {
-                btnApply.Text = "Apply";
+                btnApply.Text = GetResource("btnApply");
                 btnApply.Enabled = true;
             }
         }

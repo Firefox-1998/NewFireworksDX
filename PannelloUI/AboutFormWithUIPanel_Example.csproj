@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Z:\Visual Studio 2022\MyProjects\LICENSE" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FireworksDX\FireworksDX.csproj" />
   </ItemGroup>
 
