@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36811.4 d17.14
+VisualStudioVersion = 17.14.36811.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FireworksDX", "FireworksDX\FireworksDX.csproj", "{5D95EC0C-0F84-92DB-8362-FB75A85FBEE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PannelloUI", "PannelloUI\PannelloUI.csproj", "{56CDF356-E496-408E-8DF1-D8B86778D39A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIPanel_Example", "PannelloUI\UIPanel_Example.csproj", "{56CDF356-E496-408E-8DF1-D8B86778D39A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
